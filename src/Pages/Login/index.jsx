@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+// import { toast, ToastContainer } from "react-toastify";
 // import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
@@ -90,7 +90,7 @@ const Login = () => {
                     <button onClick={handleLogin} className="bg-cyan-700 w-20 h-8 rounded">Login</button>
                 </div>
             </div>
-            <ToastContainer />
+            {/* <ToastContainer /> */}
         </div>
     );
 };

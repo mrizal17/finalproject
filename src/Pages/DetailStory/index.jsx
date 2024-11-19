@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css'; // Import CSS untuk toast
 
 const DetailStory = () => {
@@ -60,7 +60,7 @@ const DetailStory = () => {
       )}
 
       {/* Tempat untuk menampilkan toast notification */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 };

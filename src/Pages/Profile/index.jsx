@@ -5,7 +5,7 @@ import { getUserLoginContext } from "../../context/getUserLoginContextProvider";
 // import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const Profile = () => {
     const [dataPostById, setDataPostById] = useState([]);
