@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import Footer from "../../Components/Footer";
 import axios from "axios";
 import { getUserLoginContext } from "../../context/getUserLoginContextProvider";
-import { AiOutlineLike } from "react-icons/ai";
+// import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -140,7 +140,7 @@ const Profile = () => {
                                     onClick={() => handleLike(item.id)}
                                     className="bg-[#133E87] text-white px-3 rounded-md"
                                 >
-                                    <AiOutlineLike /> Like
+                                    {/* <AiOutlineLike /> Like */}
                                 </button>
                                 <span>{item.totalLikes} Likes</span>
                             </div>
