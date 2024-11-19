@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Footer from "../../Components/Footer";
 import Navbar from "../../Components/Navbar";
-import { SlLike } from "react-icons/sl";
+// import { SlLike } from "react-icons/sl";
 import axios from "axios";
 
 const Explore = () => {
@@ -46,7 +46,7 @@ const Explore = () => {
                 ))}
                 
                 <div>
-                    <SlLike />
+                {/* <SlLike /> */}
                 </div>
             </div>
             <Footer />
