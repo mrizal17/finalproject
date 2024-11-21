@@ -3,7 +3,7 @@ import { MdOutlineTravelExplore } from "react-icons/md";
 import { IoMdHome } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { CgAdd } from "react-icons/cg";
-// import { FaUserEdit } from "react-icons/fa";
+import { FaUserEdit } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -61,7 +61,7 @@ const Footer = () => {
                     </Link>
 
                 
-                    {/* <div className="">
+                    <div className="">
                         <FaUserEdit onClick={toggleProfileMenu} />
                         {isProfileMenuOpen && (
                             <div className="  rounded-md shadow-lg">
@@ -76,7 +76,7 @@ const Footer = () => {
                                 </div>
                             </div>
                         )}
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </footer>

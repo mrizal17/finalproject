@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
 import { Link } from "react-router-dom";
+import Footer from "../../Components/Footer";
+
 
 const DetailUserById = () => {
     const { userId } = useParams();
@@ -74,20 +76,21 @@ const DetailUserById = () => {
                     <h3 className="p-1">{dataUserById.website}</h3>
                 </div>
             </div>
-            <div className="flex gap-4 text-center justify-center pt-2">
-                <Link to={"/follower"}>
+            <div className="flex gap-4 text-center justify-center pt-2 mt-16">
+                <Link to={"/getfollowerbyid/:userId"}>
                 <div className="bg-[#B9E5E8] border-black border-2 rounded-md w-44">
                     <h1>Followers</h1>
                     <p>{dataUserById.totalFollowers}</p>
                 </div>
                 </Link>
-                    <Link to={"/following"}>
+                    <Link to={"/getfollowingbyid/:userId"}>
                 <div className="bg-[#B9E5E8] border-black border-2 rounded-md w-44">
                     <h1>Following</h1>
                     <p>{dataUserById.totalFollowing}</p>
                 </div>
                     </Link>
             </div>
+            <button className="bg-lime-500 rounded-md w-96 h-14 items-center mt-1 mb-1">Follow</button>
 
             <div className="grid grid-cols-3 gap-1">
                 {dataPostById.map((item, index) => (
@@ -97,6 +100,7 @@ const DetailUserById = () => {
                         </div>
                     </div>
                 ))}
+                <Footer />
 
             </div >
 

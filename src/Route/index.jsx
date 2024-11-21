@@ -12,6 +12,9 @@ import ProtectedRoute from "./protectedRoute";
 import DetailUserById from "../Pages/DetailUserById";
 import DetailStory from "../Pages/DetailStory";
 import UploadImage from "../Pages/Uploadimage";
+import GetFollowingById from "../Pages/Getfollowingbyid";
+import GetFollowerById from "../Pages/Getfollowerbyid";
+import DetailPost from "../Pages/DetailPost";
 
 
 
@@ -57,8 +60,8 @@ export const routes = [
         )
     },
     {
-        // path: "/updateprofile",
-        // element: <UpdateProfile />
+        path: "/updateprofile",
+        element: <UpdateProfile />
     },
     {
         path:"/following",
@@ -102,5 +105,17 @@ export const routes = [
     {
         path: "/uploadimage",
         element: <UploadImage />
+    },
+    {
+        path: "/getfollowingbyid/:userId",
+        element: <GetFollowingById/>
+    },
+    {
+        path: "/getfollowerbyid/:userId",
+        element: <GetFollowerById/>
+    },
+    {
+        path: "/detailpostbyid/:postId",
+        element: <DetailPost />
     }
 ]

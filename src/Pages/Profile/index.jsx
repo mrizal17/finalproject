@@ -2,10 +2,10 @@ import { useState, useContext, useEffect } from "react";
 import Footer from "../../Components/Footer";
 import axios from "axios";
 import { getUserLoginContext } from "../../context/getUserLoginContextProvider";
-// import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { Link } from "react-router-dom";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Profile = () => {
     const [dataPostById, setDataPostById] = useState([]);
@@ -125,11 +125,13 @@ const Profile = () => {
                 {dataPostById.map((item, index) => (
                     <div key={index} className="m-2 p-2 border border-gray-300 rounded-md bg-[#FEF3E2]">
                         {/* Card Content */}
+                        <Link to={`/detailpostbyid/${dataUserLogin.id}`}>
                         <img
                             src={item.imageUrl}
                             alt="Post"
                             className="w-full h-32 object-cover rounded-t-md"
                         />
+                        </Link>
                         <div className="p-4 gap-2">
                             <p className="text-sm text-black">{item.user.username}</p>
                             <p className="text-sm">{item.caption}</p>
@@ -140,7 +142,7 @@ const Profile = () => {
                                     onClick={() => handleLike(item.id)}
                                     className="bg-[#133E87] text-white px-3 rounded-md"
                                 >
-                                    {/* <AiOutlineLike /> Like */}
+                                    <AiOutlineLike /> Like
                                 </button>
                                 <span>{item.totalLikes} Likes</span>
                             </div>
