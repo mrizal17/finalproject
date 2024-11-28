@@ -11,10 +11,10 @@ import Logout from "../Pages/Logout";
 import ProtectedRoute from "./protectedRoute";
 import DetailUserById from "../Pages/DetailUserById";
 import DetailStory from "../Pages/DetailStory";
-import UploadImage from "../Pages/Uploadimage";
 import GetFollowingById from "../Pages/Getfollowingbyid";
 import GetFollowerById from "../Pages/Getfollowerbyid";
 import DetailPost from "../Pages/DetailPost";
+import UploadImageAndCreatePost from "../Pages/Uploadimage";
 
 
 
@@ -104,7 +104,7 @@ export const routes = [
     },
     {
         path: "/uploadimage",
-        element: <UploadImage />
+        element: <UploadImageAndCreatePost />
     },
     {
         path: "/getfollowingbyid/:userId",

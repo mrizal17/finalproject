@@ -14,7 +14,7 @@ const FollowingPost = () => {
     const getDataFollowingPost = () => {
         axios
             .get(
-                "https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/following-post?size=10&page=1",
+                "https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/following-post?size=300&page=1",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const FollowingPost = () => {
     const getMyFollowingStories = () => {
         axios
             .get(
-                "https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/following-story?size=10&page=1",
+                "https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/following-story?size=100&page=1",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -42,7 +42,6 @@ const FollowingPost = () => {
                 }
             )
             .then((res) => {
-                // Filter to get unique stories by user
                 const uniqueStories = Array.from(
                     new Map(
                         res?.data?.data?.stories.map((item) => [item.user.id, item])
@@ -60,7 +59,7 @@ const FollowingPost = () => {
     return (
         <div>
             {/* Story Section */}
-            <div className="flex overflow-x-auto gap-5 p-4 bg-white border-b">
+            <div className="flex overflow-x-auto gap-5 py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
                 {dataFollowingStories.map((item, index) => (
                     <Link
                         key={index}
@@ -70,16 +69,18 @@ const FollowingPost = () => {
                         <div className="relative group">
                             {/* Profile Picture */}
                             <img
-                                className="w-16 h-16 rounded-full border-2 border-pink-500 object-cover transition-transform transform group-hover:scale-110"
+                                className="w-16 h-16 rounded-full border-4 border-pink-400 object-cover transition-transform transform group-hover:scale-110"
                                 src={
                                     item.user.profilePictureUrl ||
                                     "https://via.placeholder.com/150"
                                 }
                                 alt="Profile"
                             />
+                            {/* Glow Effect */}
+                            <div className="absolute inset-0 rounded-full bg-pink-400 opacity-0 group-hover:opacity-30 transition-opacity"></div>
                         </div>
                         {/* Username */}
-                        <p className="text-sm mt-2 truncate w-16">
+                        <p className="text-sm mt-2 text-white truncate w-16">
                             {item.user.username}
                         </p>
                     </Link>
@@ -87,12 +88,12 @@ const FollowingPost = () => {
             </div>
 
             {/* Posts Section */}
-            <div className="bg-black pt-4 px-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="bg-gradient-to-b from-gray-900 to-black pt-6 pb-10 px-6 min-h-screen">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                     {dataFollowingPost.map((item, index) => (
                         <div
                             key={index}
-                            className="bg-[#FEF3E2] border border-gray-200 rounded-xl shadow-md overflow-hidden"
+                            className="bg-white border border-gray-200 rounded-xl shadow-xl transform hover:scale-105 transition-transform duration-300 overflow-hidden"
                         >
                             <Link to={`/detailpostbyid/${item?.id}`}>
                                 {/* Post Image */}
@@ -105,22 +106,22 @@ const FollowingPost = () => {
                                     <img
                                         src={item?.user?.profilePictureUrl}
                                         alt="User"
-                                        className="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white shadow-md"
+                                        className="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white shadow-md hover:ring-2 hover:ring-pink-400"
                                     />
                                 </div>
                             </Link>
 
                             {/* Post Info */}
                             <div className="p-4">
-                                <h2 className="text-sm font-semibold text-gray-700">
+                                <h2 className="text-base font-semibold text-gray-800 truncate">
                                     {item?.user?.username}
                                 </h2>
-                                <p className="text-xs text-gray-500 truncate">
+                                <p className="text-sm text-gray-600 truncate">
                                     {item?.caption}
                                 </p>
                                 {/* Like Section */}
-                                <div className="flex items-center gap-2 mt-2 text-gray-600">
-                                    <SlLike className="text-red-500" />
+                                <div className="flex items-center gap-2 mt-3 text-gray-700">
+                                    <SlLike className="text-red-500 hover:scale-110 transition-transform" />
                                     <span>{item?.totalLikes} Likes</span>
                                 </div>
                                 {/* Comments Section */}
@@ -128,7 +129,7 @@ const FollowingPost = () => {
                                     <h3 className="font-semibold">Comments:</h3>
                                     {item?.comments?.slice(0, 2).map((comment, idx) => (
                                         <p key={idx} className="truncate">
-                                            <span className="font-semibold">
+                                            <span className="font-semibold text-gray-800">
                                                 {comment.username}:
                                             </span>{" "}
                                             {comment.comment}

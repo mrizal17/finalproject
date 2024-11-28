@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [error, setError] = useState("");
-    const apiKey = import.meta.env.VITE_API_KEY; // Ambil API key dari .env
-    console.log("API Key:", apiKey); // Debug untuk memastikan API key sudah terbaca dengan benar
+    const apiKey = import.meta.env.VITE_API_KEY;
+    console.log("API Key:", apiKey);
 
     const [form, setForm] = useState({
         name: "",
@@ -13,7 +13,7 @@ const Register = () => {
         email: "",
         password: "",
         passwordRepeat: "",
-        profilePictureUrl: "https://photo-sharing-api-bootcamp.do.dibimbing.id/images/1731636825081-nophoto2.png", // Link gambar profil default
+        profilePictureUrl: "https://photo-sharing-api-bootcamp.do.dibimbing.id/images/1731636825081-nophoto2.png",
         phoneNumber: "",
         bio: "",
         website: "",
@@ -31,7 +31,6 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validasi form
         if (!form.email || !form.password) {
             setError("Email dan Password Tidak Boleh Kosong");
             return;
@@ -42,7 +41,7 @@ const Register = () => {
             return;
         }
 
-        setError(""); // Reset error message jika validasi berhasil
+        setError("");
 
         const formData = new FormData();
         formData.append("name", form.name);
@@ -50,31 +49,29 @@ const Register = () => {
         formData.append("email", form.email);
         formData.append("password", form.password);
         formData.append("passwordRepeat", form.passwordRepeat);
-        formData.append("profilePictureUrl", form.profilePictureUrl); // Tetap pakai URL default untuk profile picture
+        formData.append("profilePictureUrl", form.profilePictureUrl);
         formData.append("phoneNumber", form.phoneNumber);
         formData.append("bio", form.bio);
         formData.append("website", form.website);
 
-        // Kirim permintaan registrasi
         try {
             const response = await axios.post(
                 'https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/register',
                 formData,
                 {
                     headers: {
-                        apiKey: apiKey, // Format header yang benar untuk API key
+                        apiKey: apiKey,
                     }
                 }
             );
 
-            console.log(response); // Debug untuk melihat respon dari API
-            setError(""); // Reset error jika registrasi berhasil
-            navigate("/login"); // Redirect ke halaman login setelah registrasi berhasil
+            console.log(response);
+            setError("");
+            navigate("/login");
         } catch (err) {
             console.log(err);
-            // Jika ada pesan kesalahan dari API, tampilkan pesan tersebut
             if (err.response && err.response.data && err.response.data.message) {
-                setError(err.response.data.message); 
+                setError(err.response.data.message);
             } else {
                 setError("Pendaftaran Gagal! Silahkan Coba Kembali!");
             }
@@ -82,126 +79,62 @@ const Register = () => {
     };
 
     return (
-        <form
-            className="max-w-md mx-auto bg-[#CBDCEB] flex flex-col items-center p-5"
-            onSubmit={handleSubmit}
-        >
-            <h1 className="mb-5">Please Register Your Account!</h1>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+            <form
+                className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8"
+                onSubmit={handleSubmit}
+            >
+                <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                    Create Your Account
+                </h1>
 
-            {/* Nama */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="text"
-                    className="border-2 w-full p-2"
-                    placeholder="Your Name"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                />
-            </div>
+                <div className="space-y-4">
+                    {/* Input Fields */}
+                    {[
+                        { name: "name", type: "text", placeholder: "Your Name" },
+                        { name: "username", type: "text", placeholder: "Your Username" },
+                        { name: "email", type: "email", placeholder: "Your Email" },
+                        { name: "password", type: "password", placeholder: "Your Password" },
+                        { name: "passwordRepeat", type: "password", placeholder: "Confirm Your Password" },
+                        { name: "phoneNumber", type: "text", placeholder: "Your Phone Number" },
+                        { name: "bio", type: "text", placeholder: "Your Bio" },
+                        { name: "website", type: "text", placeholder: "Your Website" },
+                    ].map((field) => (
+                        <div key={field.name}>
+                            <input
+                                type={field.type}
+                                name={field.name}
+                                placeholder={field.placeholder}
+                                value={form[field.name]}
+                                onChange={handleChange}
+                                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            />
+                        </div>
+                    ))}
+                </div>
 
-            {/* Username */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="text"
-                    className="border-2 w-full p-2"
-                    placeholder="Your Username"
-                    name="username"
-                    value={form.username}
-                    onChange={handleChange}
-                />
-            </div>
+                {/* Error Message */}
+                {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
 
-            {/* Email */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="email"
-                    className="border-2 w-full p-2"
-                    placeholder="Your Email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                />
-            </div>
+                {/* Submit Button */}
+                <button
+                    type="submit"
+                    className="w-full mt-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-lg shadow-md hover:from-purple-500 hover:to-pink-500 transition-all duration-300"
+                >
+                    Register
+                </button>
 
-            {/* Password */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="password"
-                    className="border-2 w-full p-2"
-                    placeholder="Your Password"
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Konfirmasi Password */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="password"
-                    className="border-2 w-full p-2"
-                    placeholder="Confirm Your Password"
-                    name="passwordRepeat"
-                    value={form.passwordRepeat}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Profile Picture (tidak perlu diubah, tetap menggunakan URL default) */}
-            {/* Komentar bagian ini jika tidak perlu ada input untuk foto profil */}
-            {/* <div className="m-2 p-2 w-full">
-                <input
-                    type="file"
-                    className="border-2 w-full p-2"
-                    onChange={handleFileChange}
-                />
-            </div> */}
-
-            {/* Nomor Telepon */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="text"
-                    className="border-2 w-full p-2"
-                    placeholder="Your Phone Number"
-                    name="phoneNumber"
-                    value={form.phoneNumber}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Bio */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="text"
-                    className="border-2 w-full p-2"
-                    placeholder="Your Bio"
-                    name="bio"
-                    value={form.bio}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Website */}
-            <div className="m-2 p-2 w-full">
-                <input
-                    type="text"
-                    className="border-2 w-full p-2"
-                    placeholder="Your Website"
-                    name="website"
-                    value={form.website}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Pesan Error */}
-            {error && <p className="text-red-500">{error}</p>}
-
-            {/* Tombol Submit */}
-            <button type="submit" className="bg-[#88C273] rounded-md w-24 p-2">
-                Submit
-            </button>
-        </form>
+                <p className="text-center text-gray-500 text-sm mt-6">
+                    Already have an account?{" "}
+                    <span
+                        className="text-blue-500 font-semibold cursor-pointer hover:underline"
+                        onClick={() => navigate("/login")}
+                    >
+                        Log In
+                    </span>
+                </p>
+            </form>
+        </div>
     );
 };
 

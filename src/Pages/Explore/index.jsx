@@ -27,8 +27,6 @@ const Explore = () => {
             });
     };
 
-    console.log("ini data explore", dataExplore);
-
     useEffect(() => {
         getDataExplore();
     }, []);
@@ -36,12 +34,12 @@ const Explore = () => {
     return (
         <div>
             <Navbar />
-            <div className="bg-black pt-20 pb-4 px-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 pt-20 pb-4 px-4 min-h-screen">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                     {dataExplore.map((item, index) => (
                         <div
                             key={index}
-                            className="bg-[#FEF3E2] border border-gray-200 rounded-xl shadow-md overflow-hidden"
+                            className="bg-white border border-gray-200 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 overflow-hidden"
                         >
                             <Link to={`/detailpostbyid/${item?.id}`}>
                                 {/* Post Image */}
@@ -54,22 +52,22 @@ const Explore = () => {
                                     <img
                                         src={item?.user?.profilePictureUrl}
                                         alt=""
-                                        className="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white shadow-md"
+                                        className="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white shadow-md hover:ring-2 hover:ring-purple-400"
                                     />
                                 </div>
                             </Link>
 
                             {/* Post Info */}
                             <div className="p-4">
-                                <h2 className="text-sm font-semibold text-gray-700">
+                                <h2 className="text-base font-semibold text-gray-800">
                                     {item?.user?.username}
                                 </h2>
-                                <p className="text-xs text-gray-500 truncate">
+                                <p className="text-sm text-gray-600 truncate">
                                     {item?.caption}
                                 </p>
                                 {/* Like Section */}
-                                <div className="flex items-center gap-2 mt-2 text-gray-600">
-                                    <SlLike className="text-red-500" />
+                                <div className="flex items-center gap-2 mt-2 text-gray-700">
+                                    <SlLike className="text-red-500 hover:scale-110 transition-transform duration-200" />
                                     <span>{item?.totalLikes} Likes</span>
                                 </div>
                                 {/* Comments Section */}
@@ -77,7 +75,7 @@ const Explore = () => {
                                     <h3 className="font-semibold">Comments:</h3>
                                     {item?.comments?.slice(0, 2).map((comment, idx) => (
                                         <p key={idx} className="truncate">
-                                            <span className="font-semibold">{comment.username}:</span>{" "}
+                                            <span className="font-semibold text-gray-800">{comment.username}:</span>{" "}
                                             {comment.comment}
                                         </p>
                                     ))}

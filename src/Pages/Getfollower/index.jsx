@@ -43,7 +43,7 @@ console.log('ini data follower', dataFollower)
             <div className="mt-4">
                 {dataFollower.map((item, index) => (
                     <div key={index}>
-                        <div className="flex w-20 gap-2 m-2">
+                        <div className="flex w-20 gap-2 m-2 mt-4">
                             <Link to={`/detailuserbyid/${item.id}`}>
                             <img src={item.profilePictureUrl} alt="" className="w-16 rounded-full h-14" />
                             <h1 className="text-2xl text-black">

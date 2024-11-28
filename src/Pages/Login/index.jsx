@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+
 
 const Login = () => {
     const [error, setError] = useState("");
@@ -45,10 +46,10 @@ const Login = () => {
             console.log('User data:', res.data.user);
 
             setError("");
-            toast.success("Login berhasil!");  // Success toast message
+            toast.success("Login berhasil!");
             setTimeout(() => {
-                navigate("/userprofile");  // Navigate after a short delay to show the success toast
-            }, 1000);  // You can adjust the delay duration as needed
+                navigate("/userprofile");
+            }, 1000);
         } catch (err) {
             console.log("Error:", err);
             if (err.response && err.response.data) {
@@ -62,35 +63,54 @@ const Login = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center gap-5">
-            <div className="mt-9">
-                <h1>LOGIN</h1>
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+            <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 w-full max-w-md">
+                <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                    Welcome Back!
+                </h1>
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Email Address
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            onChange={handleChangeForm}
+                            className="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            onChange={handleChangeForm}
+                            className="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+                        />
+                    </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                </div>
+                <button
+                    onClick={handleLogin}
+                    className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-purple-500 hover:to-pink-500 text-white font-semibold py-3 rounded-lg shadow-md transition duration-300"
+                >
+                    Login
+                </button>
+                <p className="mt-4 text-sm text-center text-gray-500">
+                    Don’t have an account?{" "}
+                    <Link to={"/register"}>
+                    <span className="text-blue-500 font-semibold cursor-pointer hover:underline">
+                        Sign Up
+                    </span>
+                    </Link>
+                </p>
+                <ToastContainer />
             </div>
-            <div className="bg-[#08C2FF] w-fit rounded-md flex flex-col justify-center items-center p-4">
-                <div className="grid rounded-sm border-2 border-y-cyan-800 p-4 m-3 md:w-[500px]">
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        onChange={handleChangeForm}
-                        className="border p-2 rounded w-full"
-                    />
-                </div>
-                <div className="grid rounded-sm border-2 border-y-cyan-800 p-4 m-3 md:w-[500px]">
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        onChange={handleChangeForm}
-                        className="border p-2 rounded w-full"
-                    />
-                </div>
-                {error && <p className="text-red-500">{error}</p>}
-                <div className="items-center text-center p-4">
-                    <button onClick={handleLogin} className="bg-cyan-700 w-20 h-8 rounded">Login</button>
-                </div>
-            </div>
-            <ToastContainer />
         </div>
     );
 };
