@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import { AiOutlineLike } from "react-icons/ai";
 import { toast } from "react-toastify";
 import Footer from "../../Components/Footer";
+import usePhotoDefault from "../../hooks/usePhotoDefault";
+
 
 const DetailPost = () => {
     const [dataDetailPost, setDataDetailPost] = useState([]);
@@ -11,6 +13,7 @@ const DetailPost = () => {
     const apiKey = localStorage.getItem("apiKey");
     const token = localStorage.getItem("access_token");
     const { postId } = useParams();
+    const photodefault = usePhotoDefault()
 
     const getDetailPost = () => {
         axios
@@ -144,13 +147,17 @@ const DetailPost = () => {
 
     if (!dataDetailPost) return <div>Loading...</div>;
 
+    console.log('ini data detailPOST COY', dataDetailPost)
+
     return (
         <div className="bg-gradient-to-b from-purple-400 to-pink-300 min-h-screen py-10 px-4">
             <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
                 {/* Post Image */}
                 <div className="w-full">
                     <img
-                        src={dataDetailPost.imageUrl}
+                        src={dataDetailPost.imageUrl || photodefault } onError={(e)=> {
+                            e.target.src = photodefault
+                        }}
                         alt="Post"
                         className="w-full h-auto object-contain"
                     />

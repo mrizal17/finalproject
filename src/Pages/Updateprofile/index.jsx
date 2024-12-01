@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Footer from "../../Components/Footer";
 import axios from "axios";
+import { getUserLoginContext } from "../../context/getUserLoginContextProvider";
 
 const UpdateProfile = () => {
-    const [dataUpdateProfile, setDataUpdateProfile] = useState([]);
     const token = localStorage.getItem("access_token");
-    const apiKey = localStorage.getItem("apiKey");
-    
+    const apiKey = localStorage.getItem("apiKey"); 
+    const { dataUserLogin } = useContext(getUserLoginContext);
+
+    console.log('ini data user yang login', dataUserLogin);
+
     const [formUpdateProfile, setFormUpdateProfile] = useState({
-        name: "",
-        username: "",
-        email: "",
-        profilePictureUrl: "",
-        phoneNumber: "",
-        bio: "",
-        website: "",
+        name: dataUserLogin.name || "",
+        username: dataUserLogin.username || "",
+        email: dataUserLogin.email || "",
+        profilePictureUrl: dataUserLogin.profilePictureUrl || "",
+        phoneNumber: dataUserLogin.phoneNumber || "",
+        bio: dataUserLogin.bio || "",
+        website: dataUserLogin.website || "",
     });
 
     const [profileImage, setProfileImage] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     // Handle form field change
     const handleChangeForm = (e) => {
@@ -33,7 +37,7 @@ const UpdateProfile = () => {
         setProfileImage(file);
     };
 
-    // Function to upload profile picture
+    // Function to upload profile picture and return the URL
     const uploadProfileImage = async () => {
         if (!profileImage) return ""; // Return empty if no image selected
 
@@ -52,8 +56,13 @@ const UpdateProfile = () => {
                     },
                 }
             );
-            console.log("Image uploaded successfully:", response.data);
-            return response.data.imageUrl; // Assuming the response contains the uploaded image URL
+
+            console.log("Image upload response:", response.data);
+            if (response.data.url) {
+                return response.data.url; // Extract the URL from the response
+            } else {
+                throw new Error("Image upload response did not contain a URL");
+            }
         } catch (err) {
             console.error("Error uploading image:", err);
             return ""; // Return empty string if upload fails
@@ -62,18 +71,29 @@ const UpdateProfile = () => {
 
     // Function to handle profile update
     const postDataUpdateProfile = async () => {
-        const uploadedImageUrl = await uploadProfileImage(); // Get uploaded image URL
+        setIsUploading(true);
+        let uploadedImageUrl = "";
 
-        if (uploadedImageUrl) {
-            setFormUpdateProfile((prevState) => ({
-                ...prevState,
-                profilePictureUrl: uploadedImageUrl, // Set the uploaded image URL in the form
-            }));
+        // Upload the profile picture and get the URL if a new image is selected
+        if (profileImage) {
+            uploadedImageUrl = await uploadProfileImage();
+            if (uploadedImageUrl) {
+                // Set the uploaded image URL in the form state before updating
+                setFormUpdateProfile((prevState) => ({
+                    ...prevState,
+                    profilePictureUrl: uploadedImageUrl,
+                }));
+            } else {
+                console.error("Image upload failed, profile update aborted.");
+                setIsUploading(false);
+                return;
+            }
         }
 
-        // Send the updated profile data
-        axios
-            .post(
+        // Send the updated profile data to the server
+        try {
+            console.log("Form data before sending:", formUpdateProfile);
+            const response = await axios.post(
                 "https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/update-profile",
                 formUpdateProfile, // Data from form
                 {
@@ -83,13 +103,13 @@ const UpdateProfile = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 }
-            )
-            .then((res) => {
-                console.log("Profile updated:", res.data);
-            })
-            .catch((err) => {
-                console.error("Error updating profile:", err);
-            });
+            );
+            console.log("Profile updated:", response.data);
+            setIsUploading(false);
+        } catch (err) {
+            console.error("Error updating profile:", err);
+            setIsUploading(false);
+        }
     };
 
     return (
@@ -156,8 +176,8 @@ const UpdateProfile = () => {
                     value={formUpdateProfile.website}
                     onChange={handleChangeForm}
                 />
-                <button type="submit" className="bg-green-500 rounded-xl w-36 h-16 mb-10">
-                    Save
+                <button type="submit" className="bg-green-500 rounded-xl w-36 h-16 mb-10" disabled={isUploading}>
+                    {isUploading ? "Saving..." : "Save"}
                 </button>
             </form>
             <Footer />

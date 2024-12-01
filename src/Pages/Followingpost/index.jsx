@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../Components/Footer";
 import { SlLike } from "react-icons/sl";
+import usePhotoDefault from "../../hooks/usePhotoDefault";
+
 
 const FollowingPost = () => {
     const [dataFollowingPost, setDataFollowingPost] = useState([]);
     const [dataFollowingStories, setDataFollowingStories] = useState([]);
     const token = localStorage.getItem("access_token");
     const apiKey = localStorage.getItem("apiKey");
+    const photodefault = usePhotoDefault ()
 
     // Get Following Posts
     const getDataFollowingPost = () => {
@@ -100,7 +103,9 @@ const FollowingPost = () => {
                                 <div className="relative">
                                     <img
                                         className="w-full h-40 object-cover"
-                                        src={item.imageUrl}
+                                        src={item.imageUrl || photodefault } onError={(e)=> {
+                                            e.target.src = photodefault
+                                        }}
                                         alt="Post"
                                     />
                                     <img

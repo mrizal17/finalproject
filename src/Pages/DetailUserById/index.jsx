@@ -5,6 +5,8 @@ import Navbar from "../../Components/Navbar";
 import { AiOutlineLike } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Footer from "../../Components/Footer";
+import { toast } from "react-toastify";
+import usePhotoDefault from "../../hooks/usePhotoDefault";
 
 const DetailUserById = () => {
     const { userId } = useParams();
@@ -13,6 +15,7 @@ const DetailUserById = () => {
     const [dataUserById, setDataUserById] = useState([]);
     const [dataPostById, setDataPostById] = useState([]);
     const [isFollowing, setIsFollowing] = useState(false);
+    const photodefault = usePhotoDefault ()
 
     const getDetailUserById = () => {
         axios
@@ -53,7 +56,7 @@ const DetailUserById = () => {
         axios
             .post(
                 `https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/follow`,
-                { userIdFollow: userId }, // Sesuaikan dengan requirement API
+                { userIdFollow: userId },
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -95,7 +98,6 @@ const DetailUserById = () => {
             });
     };
 
-    // Fungsi untuk memberikan like pada postingan
     const handleLike = async (postId) => {
         if (!token) {
             toast.error("Harap login terlebih dahulu!");
@@ -103,10 +105,9 @@ const DetailUserById = () => {
         }
 
         try {
-            // Kirim permintaan LIKE ke API
             const res = await axios.post(
                 'https://photo-sharing-api-bootcamp.do.dibimbing.id/api/v1/like',
-                { postId }, // Mengirimkan ID postingan
+                { postId },
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -118,11 +119,10 @@ const DetailUserById = () => {
 
             if (res.status === 200) {
                 toast.success("Like berhasil!");
-                // Memperbarui jumlah like secara lokal
                 setDataPostById((prevPosts) =>
                     prevPosts.map((post) =>
                         post.id === postId
-                            ? { ...post, totalLikes: post.totalLikes + 1 } // Update jumlah like
+                            ? { ...post, totalLikes: post.totalLikes + 1 }
                             : post
                     )
                 );
@@ -142,75 +142,91 @@ const DetailUserById = () => {
 
     return (
         <>
-            <div className="text-center text-2xl text-white bg-black">
+            <div className="text-center text-3xl font-bold text-white bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 py-6 shadow-lg">
                 <h1>Profile</h1>
             </div>
-            <div className="flex mt-2 gap-2">
-                <div className="w-32 h-32 mx-2">
-                    <img
-                        src={dataUserById.profilePictureUrl}
-                        alt=""
-                        className="rounded-full w-32 h-32 object-cover" />
-                </div>
-                <div className="w-56">
-                    <h1 className="p-1 text-3xl">{dataUserById.username}</h1>
-                    <h1 className="p-1">{dataUserById.name}</h1>
-                    <h2 className="p-1">{dataUserById.phoneNumber}</h2>
-                    <h3 className="p-1">{dataUserById.bio}</h3>
-                    <h3 className="p-1">{dataUserById.website}</h3>
+
+            {/* Profile Section */}
+            <div className="flex flex-col items-center mt-8 gap-4">
+                <img
+                    src={dataUserById.profilePictureUrl}
+                    alt="Profile"
+                    className="w-32 h-32 rounded-full border-4 border-purple-400 shadow-md"
+                />
+                <div className="text-center">
+                    <h1 className="text-2xl font-semibold text-gray-800">{dataUserById.username}</h1>
+                    <h2 className="text-gray-500">{dataUserById.name}</h2>
+                    <p className="text-sm text-gray-600">{dataUserById.phoneNumber}</p>
+                    <p className="text-sm text-gray-600 italic">{dataUserById.bio}</p>
+                    <a
+                        href={dataUserById.website}
+                        className="text-blue-500 underline hover:text-blue-700 transition"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {dataUserById.website}
+                    </a>
                 </div>
             </div>
-            <div className="flex gap-4 text-center justify-center pt-2">
+
+            {/* Followers and Following Section */}
+            <div className="flex justify-center gap-8 mt-6">
                 <Link to={`/getfollowerbyid/${dataUserById.id}`}>
-                    <div className="bg-[#B9E5E8] border-black border-2 rounded-md w-44">
-                        <h1>Followers</h1>
+                    <div className="text-center bg-gradient-to-r from-blue-300 to-purple-300 text-white rounded-lg px-6 py-4 shadow-md hover:scale-105 transition transform duration-200">
+                        <h1 className="text-lg font-bold">Followers</h1>
                         <p>{dataUserById.totalFollowers}</p>
                     </div>
                 </Link>
                 <Link to={`/getfollowingbyid/${dataUserById.id}`}>
-                    <div className="bg-[#B9E5E8] border-black border-2 rounded-md w-44">
-                        <h1>Following</h1>
+                    <div className="text-center bg-gradient-to-r from-purple-300 to-pink-300 text-white rounded-lg px-6 py-4 shadow-md hover:scale-105 transition transform duration-200">
+                        <h1 className="text-lg font-bold">Following</h1>
                         <p>{dataUserById.totalFollowing}</p>
                     </div>
                 </Link>
             </div>
-            <div className="flex justify-center">
+
+            {/* Follow/Unfollow Button */}
+            <div className="flex justify-center mt-4">
                 <button
-                    className={`rounded-md w-96 h-14 mt-1 mb-1 md:w-[900px] lg:w-[2000px] ${isFollowing ? "bg-red-500" : "bg-lime-500"
-                        }`}
+                    className={`rounded-md w-96 h-14 mt-1 mb-1 md:w-[900px] lg:w-[2000px] ${isFollowing ? "bg-red-500 hover:bg-red-600" : "bg-lime-500 hover:bg-lime-600"
+                        } text-white font-semibold shadow-lg transition transform duration-200`}
                     onClick={isFollowing ? handleUnfollow : handleFollow}
                 >
                     {isFollowing ? "Unfollow" : "Follow"}
                 </button>
             </div>
 
-
-            <div className="grid grid-cols-2 gap-1">
+            {/* Posts Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mx-6">
                 {dataPostById.map((item, index) => (
-                    <div key={index} className="m-2 p-2 border border-gray-300 rounded-md bg-[#FEF3E2]">
+                    <div key={index} className="bg-white rounded-lg shadow-lg hover:shadow-xl transition duration-200">
                         <Link to={`/detailpostbyid/${item.id}`}>
-                            <img src={item.imageUrl} 
-                            className="w-full h-32 object-cover rounded-t-md" />
+                            <img
+                                src={item.imageUrl || photodefault } onError={(e)=> {
+                                    e.target.src = photodefault
+                                }}
+                                alt="Post"
+                                className="w-full h-40 object-cover rounded-t-lg"
+                            />
                         </Link>
-                        <div className="p-4 gap-2">
-                        <p className="text-sm text-black">{item.user.username}</p>
-                            <p className="text-sm">{item.caption}</p>
-                            <p>{item.updatedAt}</p>
-
-                            {/* Like */}
-                            <div className="flex gap-2 items-center mt-4">
-                            <button
+                        <div className="p-4">
+                            <p className="text-gray-700 font-semibold">{item.user.username}</p>
+                            <p className="text-sm text-gray-600">{item.caption}</p>
+                            <p className="text-xs text-gray-400">{new Date(item.updatedAt).toLocaleDateString()}</p>
+                            <div className="flex items-center justify-between mt-4">
+                                <button
                                     onClick={() => handleLike(item.id)}
-                                    className="bg-[#133E87] text-white px-3 rounded-md"
+                                    className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
                                 >
-                                    <AiOutlineLike /> Like
+                                    <AiOutlineLike /> <span>Like</span>
                                 </button>
-                                <span>{item.totalLikes} Likes</span>   
+                                <span className="text-gray-600">{item.totalLikes} Likes</span>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
+
             <Footer />
         </>
     );

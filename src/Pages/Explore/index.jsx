@@ -4,11 +4,14 @@ import Navbar from "../../Components/Navbar";
 import { SlLike } from "react-icons/sl";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import usePhotoDefault from "../../hooks/usePhotoDefault";
+
 
 const Explore = () => {
     const [dataExplore, setDataExplore] = useState([]);
     const token = localStorage.getItem("access_token");
     const apiKey = localStorage.getItem("apiKey");
+    const photodefault = usePhotoDefault()
 
     const getDataExplore = () => {
         axios
@@ -46,11 +49,15 @@ const Explore = () => {
                                 <div className="relative">
                                     <img
                                         className="w-full h-40 object-cover"
-                                        src={item.imageUrl}
+                                        src={item.imageUrl || photodefault } onError={(e)=> {
+                                            e.target.src = photodefault
+                                        }}
                                         alt=""
                                     />
                                     <img
-                                        src={item?.user?.profilePictureUrl}
+                                        src={item?.user?.profilePictureUrl || photodefault } onError={(e)=> {
+                                            e.target.src = photodefault
+                                        }}
                                         alt=""
                                         className="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white shadow-md hover:ring-2 hover:ring-purple-400"
                                     />
